@@ -1,4 +1,3 @@
-
 package project0
 
 import org.mongodb.scala.bson.codecs.Macros._

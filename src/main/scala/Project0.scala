@@ -1,3 +1,5 @@
+/** Project0 TODO: add title comments to each file
+  */
 package project0
 
 import scala.collection.mutable.Map
@@ -6,33 +8,42 @@ import scala.collection.mutable.ArrayBuffer
 // import scala.concurrent.duration.Duration
 // import scala.concurrent.Future
 // import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
-
-import play.api.libs.json._
+// import scala.util.{Failure, Success}
 
 import org.mongodb.scala.MongoClient
+import com.mongodb.BasicDBObject
+import org.mongodb.scala.bson.collection.immutable.Document
 import org.bson.codecs.configuration.CodecRegistries.{
   fromProviders,
   fromRegistries
 }
-import com.mongodb.BasicDBObject
-import java.util.concurrent.TimeUnit
-import org.mongodb.scala.bson.collection.immutable.Document
+
+import play.api.libs.json._
 import java.awt.Taskbar.State
 import java.io.FileNotFoundException
+import java.util.concurrent.TimeUnit
 
-/** Project0
-  */
 object Project0 extends App {
 
+  /**
+    * parseJson: Function for parsing json
+    * @param jsonString to parse
+    * @return JsValue of a speedrun.com leaderboard to further parse with the play API
+    */
   def parseJson(jsonString : String) : JsValue = {
     return Json.parse(jsonString)
   }
 
-  def gatherSpeedruns(jsObj: JsValue, speedruns: ArrayBuffer[Speedrun]) : Unit ={
+    /**
+    * gatherSpeedruns: Function for parsing JsValue into values, 
+    * which are used to populate a SpeedrunDao.
+    * @param JsValue of a speedrun.com leaderboard to parse with play API
+    * @param speedrunDao to populate with documents of speedruns
+    * @return None
+    */
+  def gatherSpeedruns(jsObj: JsValue, speedrunDao: SpeedrunDao) : Unit ={
     val data = jsObj \ "data"
     val positions = (data \ "runs")
-
     val places = positions \\ "place"
     val runs = positions \\ "run"
 
@@ -42,20 +53,28 @@ object Project0 extends App {
       val date = (runs(i) \ "date").as[String]
       val time = (runs(i) \ "times" \ "primary_t").as[Int]
 
-      println(place)
-      println(weblink)
-      println(date)
-      println(time+"\n")
+      var speedrun = Speedrun(place, weblink, date, time)
+      speedrunDao.addSpeedrun(speedrun)
+      // val speedrun = new Speedrun(place, weblink, date, time)
+      // println(speedrun)
+      // speedruns.append(speedrun)
     }
   }
 
-  //TODO: implement the ability for user to pick from a variety of different json leaderboards
-  val input_file = "70StarTop10.json"
+  //MAIN:
+  val input_file = "70StarTop2.json" //TODO: implement the ability for user to pick from a variety of different json leaderboards
   val jsonString = scala.io.Source.fromFile(input_file).mkString
   val jsoObj = parseJson(jsonString)
   
-  var speedruns = ArrayBuffer[Speedrun]()
-  gatherSpeedruns(jsoObj, speedruns)
+  //var speedruns = ArrayBuffer[Speedrun]()
+  val speedrunDao = new SpeedrunDao(MongoClient())
+  gatherSpeedruns(jsoObj, speedrunDao)
+
+  val speedrunSeq = speedrunDao.getAll()
+  for (run <- speedrunSeq){
+    println(run)
+  }
+  speedrunDao.deleteAll()
 }
 
 //initial import---
