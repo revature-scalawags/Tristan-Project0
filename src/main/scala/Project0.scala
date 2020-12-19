@@ -30,26 +30,32 @@ object Project0 extends App {
   }
 
   def gatherSpeedruns(jsObj: JsValue, speedruns: ArrayBuffer[Speedrun]) : Unit ={
-    val positions = (jsObj \ "runs").get
+    val data = jsObj \ "data"
+    val positions = (data \ "runs")
 
     val places = positions \\ "place"
     val runs = positions \\ "run"
 
     for (i <- 0 to runs.length-1){
-      val place = places(i) 
-      val weblink = (runs(i) \ "weblink").get
-      val date = (runs(i) \ "date").get
-      val time = (runs(i) \ "times" \ "primary_t").get
+      val place = places(i).as[Int]
+      val weblink = (runs(i) \ "weblink").as[String]
+      val date = (runs(i) \ "date").as[String]
+      val time = (runs(i) \ "times" \ "primary_t").as[Int]
 
       println(place)
+      println(weblink)
+      println(date)
+      println(time+"\n")
     }
   }
 
   //TODO: implement the ability for user to pick from a variety of different json leaderboards
-  val jsoObj = parseJson("70StarTop10.json")
-
+  val input_file = "70StarTop10.json"
+  val jsonString = scala.io.Source.fromFile(input_file).mkString
+  val jsoObj = parseJson(jsonString)
+  
   var speedruns = ArrayBuffer[Speedrun]()
-  //gatherSpeedruns(jsoObj, speedruns)
+  gatherSpeedruns(jsoObj, speedruns)
 }
 
 //initial import---
