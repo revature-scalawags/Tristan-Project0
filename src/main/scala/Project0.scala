@@ -19,13 +19,6 @@ object Project0 extends App {
 
   //FOR TESTING: import org.scalatest.funsuite.AnyFunSuite
 
-  //TODO: Implement CLI with the following steps:
-  //(1) First, have user select from a list of popular games
-  //(2) Then have user select from a list of the games' categories
-  //(3) Then have user input the size they want the retrieved leaderboard to be 
-  //(#places, #speedruns will be greater than #places with ties)
-  //(4) Finally, use this information to create a url string to pass to getLeaderboard in LeaderboardUtilities
-
   //We can also have CLI functionality for what the user wants to do when the Speedrundao
   //is created.
   
@@ -35,18 +28,29 @@ object Project0 extends App {
   println("\nURL successfully created. Requesting leaderboard JSON from speedrun.com...")
   val jsonString = LeaderboardUtilities.getLeaderboard(url)
 
-  //val jsonString = LeaderboardUtilities.getLeaderboard("https://www.speedrun.com/api/v1/leaderboards/o1y9wo6q/category/7dgrrxk4?top=2&embed=players")
-
-  if (jsonString != null) {
+  if (jsonString != null) 
+  {
     println("Leaderboard JSON successfully retrieved")
     val jsoObj = LeaderboardUtilities.parseJson(jsonString)
     val speedrunDao = new SpeedrunDao(MongoClient())
 
     println("\nMongoDB initiated, parsing leaderboard json for speedrun data...")
     LeaderboardUtilities.gatherSpeedruns(jsoObj, speedrunDao)
-
-    val speedrunSeq = speedrunDao.getAll()
     println("")
+
+    var sessionConcluded = false
+    while (!sessionConcluded)
+    {
+      val userRequest = CLI.getUserRequest()
+      if (userRequest == 0){
+        sessionConcluded = true
+      }
+      //call functions depending on which action user requests
+    }
+
+
+
+    // val speedrunSeq = speedrunDao.getAll()
     // for (run <- speedrunSeq) {
     //   println(run)
     // }

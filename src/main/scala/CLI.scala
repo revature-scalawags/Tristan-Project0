@@ -385,4 +385,28 @@ object CLI {
         //BUILD URL and return
         f"https://www.speedrun.com/api/v1/leaderboards/$gameID/category/$categoryID?top=$placesChoice&embed=players"
     }
+
+    // getUserRequest: Gets and returns user input for what action to take once speedrunning data has already
+    // been gathered into a SpeedrunDao.
+    def getUserRequest() : Int = 
+    {
+        println("What do you wish to do with the speedrunning data retrieved?")
+        println("(1) Do this \n(2) Do this \n(3) Do this \n(0) Exit program")
+       
+        var userChoice = -1
+        var validUserChoice = false
+        while (!validUserChoice)
+        {
+            println("Enter a number (0-3): ")
+            var userChoiceString = scala.io.StdIn.readLine()
+            userChoice = toInt(userChoiceString)
+            if (userChoice >= 0 && userChoice <= 3) {
+                validUserChoice = true
+            }
+            else {
+                println("Invalid input. Please enter a number between 1 and 1000.")
+            }
+        }
+        userChoice
+    }
 }
