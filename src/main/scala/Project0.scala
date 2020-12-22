@@ -1,29 +1,23 @@
 /** Project0 TODO: add title comments to each file
-  */
-package project0
+ * 
+ * 
+ */
 
-// import scala.collection.mutable.Map
-// import scala.collection.mutable.ArrayBuffer
-// import scala.concurrent.Await
-// import scala.concurrent.duration.Duration
-// import scala.concurrent.Future
-// import scala.concurrent.ExecutionContext.Implicits.global
-// import scala.util.{Failure, Success}
+package project0
 
 import org.mongodb.scala.MongoClient
 import com.mongodb.BasicDBObject
 import org.mongodb.scala.bson.collection.immutable.Document
-import org.bson.codecs.configuration.CodecRegistries.{
-  fromProviders,
-  fromRegistries
-}
+import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
 
-//import play.api.libs.json._
 import java.awt.Taskbar.State
-import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
 
+
+
 object Project0 extends App {
+
+  //FOR TESTING: import org.scalatest.funsuite.AnyFunSuite
 
   //TODO: Implement CLI with the following steps:
   //(1) First, have user select from a list of popular games
@@ -35,18 +29,27 @@ object Project0 extends App {
   //We can also have CLI functionality for what the user wants to do when the Speedrundao
   //is created.
   
-  val jsonString = LeaderboardUtilities.getLeaderboard("https://www.speedrun.com/api/v1/leaderboards/o1y9wo6q/category/7dgrrxk4?top=2&embed=players")
 
-  if (jsonString != null){
+  println("\nWelcome to Tristan's Project0 -- Speedrun.com Leaderboard Analysis")
+  val url = CLI.createURL()
+  println("\nURL successfully created. Requesting leaderboard JSON from speedrun.com...")
+  val jsonString = LeaderboardUtilities.getLeaderboard(url)
+
+  //val jsonString = LeaderboardUtilities.getLeaderboard("https://www.speedrun.com/api/v1/leaderboards/o1y9wo6q/category/7dgrrxk4?top=2&embed=players")
+
+  if (jsonString != null) {
+    println("Leaderboard JSON successfully retrieved")
     val jsoObj = LeaderboardUtilities.parseJson(jsonString)
     val speedrunDao = new SpeedrunDao(MongoClient())
+
+    println("\nMongoDB initiated, parsing leaderboard json for speedrun data...")
     LeaderboardUtilities.gatherSpeedruns(jsoObj, speedrunDao)
 
     val speedrunSeq = speedrunDao.getAll()
-    println("\n\n\n")
-    for (run <- speedrunSeq){
-      println(run)
-    }
+    println("")
+    // for (run <- speedrunSeq) {
+    //   println(run)
+    // }
     speedrunDao.deleteAll()
   
   } else {

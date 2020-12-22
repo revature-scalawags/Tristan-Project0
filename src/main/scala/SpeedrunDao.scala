@@ -10,6 +10,8 @@ import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistr
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, SECONDS}
 
+
+
 class SpeedrunDao(mongoClient: MongoClient) {
   val codecRegistry = fromRegistries(
     fromProviders(classOf[Speedrun]),
