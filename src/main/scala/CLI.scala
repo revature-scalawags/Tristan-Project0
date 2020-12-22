@@ -1,3 +1,8 @@
+/** CLI.scala
+ *  This file contains all methods for interacting with and requesting input from the user. Additionally, it contains
+ *  the logic for building a URL for a leaderboard request, as well as all the relevant game IDs and category IDs
+ *  that are necessary to do this. The leaderboard retrieved each time depends on user input.
+ */
 package project0
 
 import scala.io._
@@ -62,7 +67,7 @@ object CLI {
     try {
         s.toInt
     } catch {
-        case e: Exception => 0
+        case e: Exception => -1
     }
     }
 
@@ -355,6 +360,25 @@ object CLI {
         categoryID
     }
 
+    // getPlaceChoice: Gets and returns the user's choice of place. Handles invalid input.
+    def getPlaceChoice() : Int = {
+        
+        var placeChoice = 0
+        var validPlaceChoice = false
+        while (!validPlaceChoice)
+        {
+            println("Enter a number (1-1000): ")
+            var placeChoiceString = scala.io.StdIn.readLine()
+            placeChoice = toInt(placeChoiceString)
+            if (placeChoice >= 1 && placeChoice <= 1000) {
+                validPlaceChoice = true
+            }
+            else {
+                println("Invalid input. Please enter a number between 1 and 1000.")
+            }
+        }
+        placeChoice
+    }
 
     // createURL: Creates the URL to create an HTTP GET request to speedrun.com with. URL is created based on which leaderboard 
     // a user selects. The user has a choice of game and a choice of category. The URL is then created and returned.
@@ -367,20 +391,20 @@ object CLI {
         println("\nDecide how many places on the leaderboard you wish to limit your results to (Min = 1, Max = 1000)")
         println("For instance, enter 10 to retrieve a leaderboard of the top 10 speedruns in this category.")
 
-        var placesChoice = 0
-        var validPlacesChoice = false
-        while (!validPlacesChoice)
-        {
-            println("Enter a number (1-1000): ")
-            var placesChoiceString = scala.io.StdIn.readLine()
-            placesChoice = toInt(placesChoiceString)
-            if (placesChoice >= 1 && placesChoice <= 1000) {
-                validPlacesChoice = true
-            }
-            else {
-                println("Invalid input. Please enter a number between 1 and 1000.")
-            }
-        }
+        var placesChoice = getPlaceChoice()
+        // var validPlacesChoice = false
+        // while (!validPlacesChoice)
+        // {
+        //     println("Enter a number (1-1000): ")
+        //     var placesChoiceString = scala.io.StdIn.readLine()
+        //     placesChoice = toInt(placesChoiceString)
+        //     if (placesChoice >= 1 && placesChoice <= 1000) {
+        //         validPlacesChoice = true
+        //     }
+        //     else {
+        //         println("Invalid input. Please enter a number between 1 and 1000.")
+        //     }
+        // }
         
         //BUILD URL and return
         f"https://www.speedrun.com/api/v1/leaderboards/$gameID/category/$categoryID?top=$placesChoice&embed=players"
@@ -390,23 +414,26 @@ object CLI {
     // been gathered into a SpeedrunDao.
     def getUserRequest() : Int = 
     {
-        println("What do you wish to do with the speedrunning data retrieved?")
-        println("(1) Do this \n(2) Do this \n(3) Do this \n(0) Exit program")
+        println("\nWhat do you wish to do with the speedrunning data retrieved?")
+        println("(1) Compute average time \n(2) Compute median time \n(3) Display all runs \n(4) Lookup by place") 
+        println("(0) Exit program")
        
         var userChoice = -1
         var validUserChoice = false
         while (!validUserChoice)
         {
-            println("Enter a number (0-3): ")
+            println("Enter a number (0-4): ")
             var userChoiceString = scala.io.StdIn.readLine()
             userChoice = toInt(userChoiceString)
-            if (userChoice >= 0 && userChoice <= 3) {
+            if (userChoice >= 0 && userChoice <= 4) {
                 validUserChoice = true
             }
             else {
-                println("Invalid input. Please enter a number between 1 and 1000.")
+                println("Invalid input. Please enter a number between 0 and 4.")
             }
         }
         userChoice
     }
+
+
 }

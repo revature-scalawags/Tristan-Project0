@@ -15,9 +15,10 @@ sbt test
 
 Program Explanation:
 
-First, the program creates an HTTP request to speedrun.com for a JSON of a leaderboard based upon the leaderboard
-selected by the user. The program retrieves this JSON as a string, parses it into a JSON object using the play-json
-library, and then creates a SpeedrunDAO which contains all speedruns in the leaderboard requested.
+This program creates an HTTP request to speedrun.com for a JSON of a leaderboard based upon the leaderboard
+selected by the user (leaderboard game, category, and size can be specified). The program retrieves this JSON as 
+a string, parses it into a JSON object using the play-json library, and then creates a SpeedrunDAO which contains 
+all speedruns in the leaderboard requested.
 
 The SpeedrunDAO consists of a MongoDB collection, where speedruns are the documents and their associated variables
 are the fields. The program contains many methods which utilize MongoDB to anaylze and manipulate the data contained
@@ -49,4 +50,8 @@ requesting Super Mario 64, 70 star category, limited to the top 2 places on the 
 
 Leaderboard Analysis Options:
 
-Leaderboard analysis options are to come.
+(1) Compute average time 
+(2) Compute median time 
+(3) Display all runs 
+(4) Lookup by place
+(0) Exit program

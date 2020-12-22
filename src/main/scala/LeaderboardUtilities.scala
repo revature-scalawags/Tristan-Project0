@@ -1,3 +1,7 @@
+/** LeaderboardUtilities.scala
+ *  This file contains all the methods for parsing relevant data from a speedrun.com leaderboard JSON string
+ *  once it has been retrieved.
+ */
 package project0
 
 import play.api.libs.json._
