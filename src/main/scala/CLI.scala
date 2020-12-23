@@ -62,7 +62,7 @@ object CLI {
     private val undertale_Genocide = "jdz36o32"
 
 
-    // toInt: Attempts to convert a string to an integer. Returns 0 on failure.
+    // toInt: Attempts to convert a string to an integer. Returns -1 on failure.
     def toInt(s: String): Int = {
     try {
         s.toInt
@@ -143,6 +143,10 @@ object CLI {
     def get_botw_category_ID() : String = {
         println("Which category of The Legend of Zelda: Breath of the Wild do you wish to retrieve a speedrunning leaderboard for?")
         println("(1) Any% \n(2) 100% \n(3) AllShrines")
+
+        println("\nPLEASE NOTE that looking up by place does not function correctly for Breath of the Wild.")
+        println("Unfortunately this is due to the leaderboard not being constructed properly, and many runs' places being listed as '0th place' ")
+        println("lookupByPlace (seen after leaderboard selection) will work properly for every other game, just not Breath of the Wild.\n")
   
         var categoryChoice = 0
         var validCategoryChoice = false
