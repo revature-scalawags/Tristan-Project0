@@ -11,12 +11,13 @@ import org.mongodb.scala.Observable
 import org.mongodb.scala.model.Filters._
 import org.mongodb.scala.model.Projections._
 import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, SECONDS}
 
 
-class SpeedrunDao(mongoClient: MongoClient) {
+class SpeedrunDao(mongoClient: MongoClient) extends LazyLogging {
   val codecRegistry = fromRegistries(
     fromProviders(classOf[Speedrun]),
     MongoClient.DEFAULT_CODEC_REGISTRY

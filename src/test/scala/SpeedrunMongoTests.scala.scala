@@ -34,6 +34,7 @@ class SpeedrunMongoTests extends AnyFunSuite {
         speedrunDao.deleteAll()
     }
 
+    //FAILURE: IF NEW SPEEDRUNS ARE ADDED must reevaluate desiredAvgTime so this test will pass
     test("SpeedrunDao.avgTime() computes correct average time Test1 - Mario") {
         val exampleURL = "https://www.speedrun.com/api/v1/leaderboards/o1y9wo6q/category/7dgrrxk4?top=100&embed=players"
         val jsonString = LeaderboardUtilities.getLeaderboard(exampleURL)
@@ -49,6 +50,7 @@ class SpeedrunMongoTests extends AnyFunSuite {
         // of at most .01 between the average time retrieved and the desired average time
     }
 
+    //FAILURE: IF NEW SPEEDRUNS ARE ADDED must reevaluate desiredAvgTime so this test will pass
     test("SpeedrunDao.avgTime() computes correct average time Test2 - Spongebob") {
         val exampleURL = "https://www.speedrun.com/api/v1/leaderboards/m1mxx362/category/zd3ymr2n?top=100&embed=players"
         val jsonString = LeaderboardUtilities.getLeaderboard(exampleURL)
@@ -57,13 +59,14 @@ class SpeedrunMongoTests extends AnyFunSuite {
         val speedrunDao = new SpeedrunDao(MongoClient())
         LeaderboardUtilities.gatherSpeedruns(jsoObj, speedrunDao)
         val avgTime = speedrunDao.avgTime()
-        val desiredAvgTime = 3554.72
+        val desiredAvgTime = 3553.82
         speedrunDao.deleteAll()
         assert((avgTime+.01) > desiredAvgTime && (avgTime-.01) < desiredAvgTime)  
         //actual average time goes on for many decimal places, the above logic is to allow a difference
         // of at most .01 between the average time retrieved and the desired average time 
     }
 
+    //FAILURE: IF NEW SPEEDRUNS ARE ADDED must reevaluate desiredAvgTime so this test will pass
     test("SpeedrunDao.avgTime() computes correct average time Test3 - Undertale") {
         val exampleURL = "https://www.speedrun.com/api/v1/leaderboards/4d73n317/category/02qgm7jd?top=100&embed=players"
         val jsonString = LeaderboardUtilities.getLeaderboard(exampleURL)
@@ -79,6 +82,7 @@ class SpeedrunMongoTests extends AnyFunSuite {
         // of at most .01 between the average time retrieved and the desired average time  
     }
 
+    //FAILURE: IF NEW SPEEDRUNS ARE ADDED must reevaluate desiredMedTime so this test will pass
     test("SpeedrunDao.medianTime() computes correct median time Test1 - Mario") {
         val exampleURL = "https://www.speedrun.com/api/v1/leaderboards/o1y9wo6q/category/7dgrrxk4?top=100&embed=players"
         val jsonString = LeaderboardUtilities.getLeaderboard(exampleURL)
@@ -92,6 +96,7 @@ class SpeedrunMongoTests extends AnyFunSuite {
         assert(medTime == desiredMedTime)   
     }
 
+    //FAILURE: IF NEW SPEEDRUNS ARE ADDED must reevaluate desiredMedTime so this test will pass
     test("SpeedrunDao.medianTime() computes correct median time Test2 - Spongebob") {
         val exampleURL = "https://www.speedrun.com/api/v1/leaderboards/m1mxx362/category/zd3ymr2n?top=100&embed=players"
         val jsonString = LeaderboardUtilities.getLeaderboard(exampleURL)
@@ -105,6 +110,7 @@ class SpeedrunMongoTests extends AnyFunSuite {
         assert(medTime == desiredMedTime)   
     }
 
+    //FAILURE: IF NEW SPEEDRUNS ARE ADDED must reevaluate desiredMedTime so this test will pass
     test("SpeedrunDao.medianTime() computes correct median time Test3 - Undertale") {
         val exampleURL = "https://www.speedrun.com/api/v1/leaderboards/4d73n317/category/02qgm7jd?top=100&embed=players"
         val jsonString = LeaderboardUtilities.getLeaderboard(exampleURL)
